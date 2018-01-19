@@ -1,0 +1,15 @@
+<form action=""
+  [formGroup]="formTodoList"
+  (ngSubmit)="onSubmit()"
+>
+  <label>
+    <span>Please enter todo</span>
+    <input type="text" formControlName="todoName">
+  </label>
+
+  <button>Add todo</button>
+</form>
+
+<app-item *ngFor="let todo of todoList; let todoIndex = index" [todoName]="todo.todoName">
+  <button (click)="deleteTodo(todoIndex)">Delete Todo</button>
+</app-item>
