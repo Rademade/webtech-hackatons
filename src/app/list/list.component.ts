@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import {FormBuilder, FormGroup, FormControl, Validators} from '@angular/forms';
 
 @Component({
   selector: 'app-list',
@@ -19,13 +19,24 @@ export class ListComponent implements OnInit {
 
   ngOnInit() {
     this.formTodoList = this.formBuilder.group({
-      todoName: ''
+      todoName: new FormControl('', [
+        Validators.required,
+        Validators.minLength(5),
+        Validators.maxLength(10)
+      ])
     });
   }
   onSubmit() {
-    this.todoList.push(this.formTodoList.value);
+
+    if (this.formTodoList.valid) {
+      this.todoList.push(this.formTodoList.value);
+      this.formTodoList.reset();
+    } else {
+      alert('Form is invalid')
+    }
   }
-  deleteTodo(todoIndex: number) {
+
+  todoRemove(todoIndex: number) {
     console.log(todoIndex);
     this.todoList.splice(todoIndex, 1);
   }

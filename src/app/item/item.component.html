@@ -1,2 +1,9 @@
-{{ todoName }}
-<ng-content></ng-content>
+<div class="app-item__data">
+  <span class="app-item__title">{{ todoName }}</span>
+
+  <button
+    class="app-item__btn"
+    (click)="remove()">
+    Delete Todo
+  </button>
+</div>
