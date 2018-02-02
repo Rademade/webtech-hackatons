@@ -2,6 +2,7 @@
   [formGroup]="formTodoList"
   (ngSubmit)="onSubmit()"
 >
+  <span *ngIf="formMsg">{{ formMsg }}</span>
   <label>
     <span>Please enter todo</span>
     <input type="text" formControlName="todoName">
@@ -10,6 +11,7 @@
   <button>Add todo</button>
 </form>
 
-<app-item *ngFor="let todo of todoList; let todoIndex = index" [todoName]="todo.todoName">
-  <button (click)="deleteTodo(todoIndex)">Delete Todo</button>
-</app-item>
+<app-item
+  *ngFor="let todo of todoList;let todoIndex = index"
+  [todoName]="todo['todoName']"
+  (todoRemove)="todoRemove(todoIndex)"></app-item>
