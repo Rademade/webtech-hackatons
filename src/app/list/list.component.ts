@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { ListService } from './list.service';
+import { Http } from '@angular/http';
 
 @Component({
   selector: 'app-list',
@@ -9,24 +11,24 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 
 export class ListComponent implements OnInit {
   private formTodoList: FormGroup;
-  private todoList: Array<Object> = [
-    {todoName: 'Купить хлеб'},
-    {todoName: 'Купить воды'},
-  ];
+  public todoList: any;
   constructor(
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private listService: ListService,
+    private http: Http,
   ) {}
 
   ngOnInit() {
     this.formTodoList = this.formBuilder.group({
-      todoName: ''
+      todoName: '',
     });
+    this.http.get('http://192.168.1.43:3000/api/v1/checklists').subscribe(
+    (data) => {
+      this.todoList = data.json();
+    });
+
   }
   onSubmit() {
     this.todoList.push(this.formTodoList.value);
-  }
-  deleteTodo(todoIndex: number) {
-    console.log(todoIndex);
-    this.todoList.splice(todoIndex, 1);
   }
 }

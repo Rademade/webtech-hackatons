@@ -6,7 +6,7 @@ import {Component, Input, OnInit} from '@angular/core';
   styleUrls: ['./item.component.css']
 })
 export class ItemComponent implements OnInit {
-  @Input() todoName: String = 'Default title';
+  @Input() title: String = 'Default title';
   constructor() { }
   ngOnInit() {}
 }

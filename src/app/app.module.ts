@@ -1,23 +1,28 @@
-import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { RouterModule } from '@angular/router';
+import { BrowserModule } from '@angular/platform-browser';
+
+import { ListModule } from './list/list.module';
+import { SignModule } from './sign/sign.module';
+
+import { appRouting } from './app-routing.module';
 
 import { AppComponent } from './app.component';
-import { ListComponent } from './list/list.component';
-import { ItemComponent } from './item/item.component';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AppGuard } from './app.guard';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    ListComponent,
-    ItemComponent
-  ],
   imports: [
     BrowserModule,
-    FormsModule,
-    ReactiveFormsModule,
+    ListModule,
+    SignModule,
+    RouterModule.forRoot(appRouting)
   ],
-  providers: [],
+  declarations: [
+    AppComponent
+  ],
+  providers: [
+    AppGuard
+  ],
   bootstrap: [
     AppComponent
   ]
