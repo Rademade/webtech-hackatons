@@ -20,7 +20,7 @@ export class ListComponent implements OnInit {
 
   ngOnInit() {
     this.formTodoList = this.formBuilder.group({
-      todoName: '',
+      title: '',
     });
     this.http.get('http://192.168.1.43:3000/api/v1/checklists').subscribe(
     (data) => {
@@ -29,6 +29,14 @@ export class ListComponent implements OnInit {
 
   }
   onSubmit() {
-    this.todoList.push(this.formTodoList.value);
+    this.http.post('http://192.168.1.43:3000/api/v1/checklists', {title: this.formTodoList.value.title}).subscribe(
+    (data) => {
+      this.todoList.push(data.json());
+    });
+  }
+  deleteTodo(id: string) {
+    this.http.delete('http://192.168.1.43:3000/api/v1/checklists/' + id).subscribe(
+      () => this.todoList.splice(id, 1)
+    );
   }
 }

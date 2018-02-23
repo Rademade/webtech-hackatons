@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 @Component({
   selector: 'app-item',
@@ -7,6 +7,11 @@ import {Component, Input, OnInit} from '@angular/core';
 })
 export class ItemComponent implements OnInit {
   @Input() title: String = 'Default title';
+  @Output() delete: EventEmitter<Function> = new EventEmitter();
   constructor() { }
   ngOnInit() {}
+
+  deleteTodo() {
+    this.delete.emit();
+  }
 }
