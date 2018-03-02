@@ -1,13 +1,14 @@
-<form
-  [formGroup]="formTodoList"
-  (ngSubmit)="onSubmit()">
+<form [formGroup]="formTodoList">
+  <app-input formControlName="title" [(ngModel)]="value" [value]="value"></app-input>
 
-  <app-input formControlName="title"></app-input>
-
-  {{ formTodoList.value | json }}
-  <button type="submit">Add checklist</button>
+  <button *ngIf="!editMode" type="submit" (click)="createTodo()">Add todo</button>
+  <button *ngIf="editMode" type="submit" (click)="updateTodo()">Update todo</button>
 </form>
+
+
 <app-item
-  *ngFor="let todo of todoList;"
+  *ngFor="let todo of todoList;let index = index;"
   [title]="todo.title"
-  (delete)="deleteTodo(todo.id)"></app-item>
+  (delete)="deleteTodo(todo.id)"
+  (edit)="editTodo(index)">
+</app-item>

@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { Component, OnChanges, OnInit } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { ListService } from './list.service';
 import { Http } from '@angular/http';
 
@@ -9,9 +9,11 @@ import { Http } from '@angular/http';
   styleUrls: ['./list.component.css']
 })
 
-export class ListComponent implements OnInit {
+export class ListComponent implements OnInit, OnChanges {
   private formTodoList: FormGroup;
   public todoList: any;
+  public currentTodo;
+  public editMode: boolean = false;
   constructor(
     private formBuilder: FormBuilder,
     private listService: ListService,
@@ -22,21 +24,43 @@ export class ListComponent implements OnInit {
     this.formTodoList = this.formBuilder.group({
       title: '',
     });
-    this.http.get('http://192.168.1.43:3000/api/v1/checklists').subscribe(
-    (data) => {
-      this.todoList = data.json();
-    });
+    this.getTodos();
+  }
 
+  ngOnChanges() {
+    this.formTodoList.reset();
   }
-  onSubmit() {
-    this.http.post('http://192.168.1.43:3000/api/v1/checklists', {title: this.formTodoList.value.title}).subscribe(
-    (data) => {
-      this.todoList.push(data.json());
-    });
+  getTodos() {
+    this.listService.index().subscribe(
+      (data) => {
+        this.todoList = data.json();
+      });
   }
-  deleteTodo(id: string) {
-    this.http.delete('http://192.168.1.43:3000/api/v1/checklists/' + id).subscribe(
-      () => this.todoList.splice(id, 1)
+  createTodo() {
+    this.listService.create(this.formTodoList.value).subscribe(
+      () => this.getTodos()
     );
+    this.ngOnChanges();
+  }
+  deleteTodo(id) {
+    this.listService.destroy(id).subscribe(
+      () => this.getTodos()
+    );
+  }
+  editTodo(index) {
+    this.toggleEditMode();
+    this.currentTodo = this.todoList[index];
+    this.formTodoList.patchValue(this.currentTodo);
+    this.ngOnChanges();
+  }
+  updateTodo() {
+    this.toggleEditMode();
+    this.listService.update(this.currentTodo.id, this.formTodoList.value).subscribe(
+      () => this.getTodos()
+    );
+    this.ngOnChanges();
+  }
+  toggleEditMode() {
+    this.editMode = !this.editMode;
   }
 }
