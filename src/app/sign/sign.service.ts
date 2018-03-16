@@ -17,9 +17,5 @@ export class SignService {
     );
   }
   isAuthenticated() {
-    firebase.auth().onAuthStateChanged(
-      function(user) {
-        return false;
-    });
   }
 }

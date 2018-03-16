@@ -12,16 +12,17 @@ export class AppGuard implements CanActivate {
   canActivate(
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
-    return this.signService.isAuthenticated().then(
-      (authentificated: boolean) => {
-        if (this.signService.isAuthenticated()) {
-          this.router.navigate(['/']);
-          return true;
-        } else {
-          this.router.navigate(['/sign']);
-          return false;
-        }
-      }
-    );
+    return true;
+    // return this.signService.isAuthenticated().then(
+    //   (authentificated: boolean) => {
+    //     if (this.signService.isAuthenticated()) {
+    //       this.router.navigate(['/']);
+    //       return true;
+    //     } else {
+    //       this.router.navigate(['/sign']);
+    //       return false;
+    //     }
+    //   }
+    // );
   }
 }
