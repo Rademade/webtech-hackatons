@@ -4,7 +4,6 @@ import * as firebase from 'firebase';
 @Injectable()
 export class SignService {
   public token: string;
-  public tokenStatus: boolean;
   signUser(email: string, password: string) {
     firebase.auth().signInWithEmailAndPassword(email, password).catch(
       (error) => console.log(error)
@@ -16,15 +15,19 @@ export class SignService {
     firebase.auth().currentUser.getToken().then(
       (token: string) => this.token = token
     );
-    this.isAuthentificated(this.token);
   }
-  isAuthentificated(token) {
-    if (token !== undefined) {
-      console.log(this.tokenStatus);
-      return this.tokenStatus = true;
-    } else {
-      console.log(this.tokenStatus);
-      return this.tokenStatus = false;
-    }
+  isAuthenticated() {
+    const promise = new Promise(
+      (resolve, reject) => {
+        firebase.auth().onAuthStateChanged(function(user) {
+          if (user) {
+            resolve(true);
+          } else {
+            resolve(false);
+          }
+        });
+      }
+    );
+    return promise;
   }
 }

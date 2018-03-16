@@ -7,11 +7,21 @@ import { SignService } from './sign/sign.service';
 export class AppGuard implements CanActivate {
   constructor(
     private signService: SignService,
-    private router: Router
+    private router: Router,
   ) {}
   canActivate(
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
-    return true;
+    return this.signService.isAuthenticated().then(
+      (authentificated: boolean) => {
+        if (this.signService.isAuthenticated()) {
+          this.router.navigate(['/']);
+          return true;
+        } else {
+          this.router.navigate(['/sign']);
+          return false;
+        }
+      }
+    );
   }
 }
