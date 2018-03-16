@@ -17,17 +17,9 @@ export class SignService {
     );
   }
   isAuthenticated() {
-    const promise = new Promise(
-      (resolve, reject) => {
-        firebase.auth().onAuthStateChanged(function(user) {
-          if (user) {
-            resolve(true);
-          } else {
-            resolve(false);
-          }
-        });
-      }
-    );
-    return promise;
+    firebase.auth().onAuthStateChanged(
+      function(user) {
+        return false;
+    });
   }
 }
